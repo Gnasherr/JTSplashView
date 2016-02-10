@@ -44,7 +44,7 @@ class JTSplashView: UIView {
         doInit()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         doInit()
     }
@@ -89,7 +89,7 @@ class JTSplashView: UIView {
         }
         
         if (circleSize != nil) {
-            var sizeWithoutBorder = CGSizeMake(circleSize!.width - sharedInstance.borderWidth, circleSize!.height - sharedInstance.borderWidth)
+            let sizeWithoutBorder = CGSizeMake(circleSize!.width - sharedInstance.borderWidth, circleSize!.height - sharedInstance.borderWidth)
             
             sharedInstance.circlePathFinal = UIBezierPath(ovalInRect: CGRect(x: (JTSplashView.screenSize.width / 2) - (sizeWithoutBorder.width / 2), y: (JTSplashView.screenSize.height / 2) - (sizeWithoutBorder.height / 2), width: sizeWithoutBorder.width, height: sizeWithoutBorder.height))
             sharedInstance.circlePathSqueezeVertical = UIBezierPath(ovalInRect: CGRect(x: (JTSplashView.screenSize.width / 2) - ((sizeWithoutBorder.width / 2) * 0.96), y: (JTSplashView.screenSize.height / 2) - ((sizeWithoutBorder.height / 2) * 1.04), width: sizeWithoutBorder.width * 0.96, height: sizeWithoutBorder.height * 1.04))
@@ -151,8 +151,8 @@ class JTSplashView: UIView {
     }
     
     private func createMaskCircleLayer() -> CAShapeLayer {
-        var circleLayer = CAShapeLayer()
-        var maskPath = CGPathCreateMutable()
+        let circleLayer = CAShapeLayer()
+        let maskPath = CGPathCreateMutable()
         CGPathAddPath(maskPath, nil, circlePathShrinked.CGPath)
         CGPathAddRect(maskPath, nil, CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height))
         circleLayer.path = maskPath
@@ -176,7 +176,7 @@ class JTSplashView: UIView {
     }
     
     private func createBackgroundWithMask(mask: CAShapeLayer?) -> UIView {
-        var backgroundView = UIView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height))
+        let backgroundView = UIView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height))
         backgroundView.backgroundColor = bgColor
         backgroundView.userInteractionEnabled = false
         
@@ -192,8 +192,8 @@ class JTSplashView: UIView {
         UIView.animateWithDuration(NSTimeInterval(self.duration * 0.5), delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -> Void in
             
             // The rest of the transformation will not be visible due completion block alpha = 0 part. But it will look like it just continued faster
-            var cornerCorrection : CGFloat = 1.25
-            var multiplier = (JTSplashView.screenSize.height / self.borderWidth) * cornerCorrection
+            let cornerCorrection : CGFloat = 1.25
+            let multiplier = (JTSplashView.screenSize.height / self.borderWidth) * cornerCorrection
             
             self.bgWithMask.transform = CGAffineTransformMakeScale(multiplier, multiplier)
             self.bgWithMask.center = CGPointMake(JTSplashView.screenSize.width / 2, JTSplashView.screenSize.height / 2)
@@ -213,7 +213,7 @@ class JTSplashView: UIView {
     
     private func zoomOut() {
         // Shrink
-        var shrinkAnimation: CABasicAnimation = CABasicAnimation(keyPath: "path")
+        let shrinkAnimation: CABasicAnimation = CABasicAnimation(keyPath: "path")
         shrinkAnimation.fromValue = circlePathFinal.CGPath
         shrinkAnimation.toValue = circlePathShrinked.CGPath
         shrinkAnimation.duration = duration;
@@ -227,7 +227,7 @@ class JTSplashView: UIView {
     }
     
     private func enlarge() {
-        var enlargeAnimation: CABasicAnimation = CABasicAnimation(keyPath: "path")
+        let enlargeAnimation: CABasicAnimation = CABasicAnimation(keyPath: "path")
         enlargeAnimation.fromValue = circlePathInitial.CGPath
         enlargeAnimation.toValue = circlePathFinal.CGPath
         enlargeAnimation.duration = duration;
@@ -237,35 +237,35 @@ class JTSplashView: UIView {
     }
     
     @objc private func vibration() {
-        var vibration1: CABasicAnimation = CABasicAnimation(keyPath: "path")
+        let vibration1: CABasicAnimation = CABasicAnimation(keyPath: "path")
         vibration1.fromValue = circlePathFinal.CGPath
         vibration1.toValue = circlePathSqueezeVertical.CGPath
         vibration1.beginTime = 0.0
         vibration1.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         vibration1.duration = duration
         
-        var vibration2: CABasicAnimation = CABasicAnimation(keyPath: "path")
+        let vibration2: CABasicAnimation = CABasicAnimation(keyPath: "path")
         vibration2.fromValue = circlePathSqueezeVertical.CGPath
         vibration2.toValue = circlePathSqueezeHorizontal.CGPath
         vibration2.beginTime = duration
         vibration2.duration = duration
         vibration2.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         
-        var vibration3: CABasicAnimation = CABasicAnimation(keyPath: "path")
+        let vibration3: CABasicAnimation = CABasicAnimation(keyPath: "path")
         vibration3.fromValue = circlePathSqueezeHorizontal.CGPath
         vibration3.toValue = circlePathSqueezeVertical.CGPath
         vibration3.beginTime = duration * 2
         vibration3.duration = duration
         vibration3.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         
-        var vibration4: CABasicAnimation = CABasicAnimation(keyPath: "path")
+        let vibration4: CABasicAnimation = CABasicAnimation(keyPath: "path")
         vibration4.fromValue = circlePathSqueezeVertical.CGPath
         vibration4.toValue = circlePathFinal.CGPath
         vibration4.beginTime = duration * 3
         vibration4.duration = duration
         vibration4.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         
-        var vibrations: CAAnimationGroup = CAAnimationGroup()
+        let vibrations: CAAnimationGroup = CAAnimationGroup()
         vibrations.animations = [vibration1, vibration2, vibration3, vibration4]
         vibrations.duration = duration * 4
         vibrations.repeatCount = 1
